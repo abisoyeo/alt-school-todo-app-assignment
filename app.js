@@ -48,6 +48,11 @@ passport.use(userModel.createStrategy());
 passport.serializeUser(userModel.serializeUser());
 passport.deserializeUser(userModel.deserializeUser());
 
+// Redirect root ("/") to "/signup"
+app.get("/", (req, res) => {
+  res.redirect("/signup");
+});
+
 // Routes
 app.use("/", authRoutes); // Login, Signup, Logout routes
 app.use("/todos", connectEnsureLogin.ensureLoggedIn(), todoRoutes); // Protected
