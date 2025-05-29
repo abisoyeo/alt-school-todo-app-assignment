@@ -53,6 +53,13 @@ app.use(
   })
 );
 
+// Middleware to log session and user information for debugging
+app.use((req, res, next) => {
+  console.log("SESSION:", req.session);
+  console.log("USER:", req.user);
+  next();
+});
+
 // Passport configuration
 app.use(passport.initialize());
 app.use(passport.session());
