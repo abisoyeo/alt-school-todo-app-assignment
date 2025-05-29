@@ -1,5 +1,6 @@
 const express = require("express");
 const session = require("express-session");
+const MongoStore = require("connect-mongo");
 const passport = require("passport");
 const connectEnsureLogin = require("connect-ensure-login");
 const path = require("path");
@@ -36,7 +37,16 @@ app.use(
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
-    cookie: { maxAge: 60 * 60 * 1000 }, // 1 hour
+    store: MongoStore.create({
+      mongoUrl: process.env.MONGODB_URI,
+      collectionName: "sessions",
+      ttl: 14 * 24 * 60 * 60, // session expires in 14 days
+    }),
+    cookie: {
+      maxAge: 14 * 24 * 60 * 60 * 1000, // 14 days in milliseconds
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+    },
   })
 );
 
@@ -55,8 +65,7 @@ app.get("/", (req, res) => {
 
 // Routes
 app.use("/", authRoutes); // Login, Signup, Logout routes
-app.use("/todos", connectEnsureLogin.ensureLoggedIn(), todoRoutes); // Protected
-// app.use("/todos", todoRoutes); // Protected
+app.use("/todos", connectEnsureLogin.ensureLoggedIn(), todoRoutes); // Protected todo routes
 
 // Error handling middleware
 app.use((err, req, res, next) => {
