@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Your Todos</title>
+    <link rel="stylesheet" href="/css/todos.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Welcome back, <%= username %></h1>
+      <form action="/logout" method="POST" style="margin: 0">
+        <button class="logout" type="submit">Sign Out</button>
+      </form>
+    </header>
+    <main>
+      <div class="container">
+        <% if (error) { %>
+          <span class="error"><%= error %></span>
+        <% } %>
+        <div class="todo-output">
+          <div class="todo-filter">
+            <a href="/todos" class="btn">View All</a>
+            <a href="/todos/?todoStatus=pending" class="btn">View Pending</a>
+            <a href="/todos/?todoStatus=completed" class="btn">View Completed</a>
+
+          </div>
+
+          <% if (todos && todos.length > 0) { %>
+          <h3>
+            <% if (statusFilter.$ne) { %> Your Total Tasks <% } else
+            if (statusFilter === 'pending') { %> Your Pending Tasks... <% } else
+            if (statusFilter === 'completed') { %> Your Completed Tasks... <% } %>
+          </h3>
+
+          <ul>
+            <% todos.forEach(todo => { %>
+
+            <li id="todo-list">
+              <h3 style="margin: 1px"><%= todo.title %></h3>
+              <p style="margin: 2px"><%= todo.body %></p>
+
+              <div>
+                <button 
+                class="btn" 
+                onclick="updateTodo('<%= todo._id %>')"
+                <%= todo.status === "completed" ? 'disabled' : '' %>
+                >
+                  <%= todo.status==="completed" ? '✓ Completed' : 'Mark Complete' %>
+                </button>
+  
+                <button
+                  class="btn btn-danger"
+                  onclick="handleDelete('<%= todo._id %>')"
+                  >
+                  Delete
+                </button>
+              </div>
+             
+            </li>
+            <% }) %>
+          </ul>
+          <% } else { %>
+          <h3>You have no Todos.</h3>
+          <% } %>
+        </div>
+
+        <div class="todo-input">
+          <h2>Add more tasks below...</h2>
+          <form action="/todos" method="POST">
+            <div class="addTodoForm">
+              <div class="titleInput">
+                <input
+                  id="newTodoTitle"
+                  type="text"
+                  name="title"
+                  placeholder="Add a title..."
+                />
+              </div>
+              <div class="taskInput">
+                <input
+                  id="newTodoTitle"
+                  type="text"
+                  name="body"
+                  placeholder="Add a task..."
+                />
+              </div>
+              <button id="addTodoButton" type="submit">Add</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </main>
+  <script>
+    async function handleDelete(id) {
+      const response = await fetch(`/todos/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status: "deleted" }),
+      });
+      if (response.ok) window.location.reload();
+    }
+  
+    async function updateTodo(id) {
+      const response = await fetch(`/todos/${id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ status: "completed" }),
+      });
+      if (response.ok) window.location.reload();
+    }
+  </script>
+  </body>
+</html>
+

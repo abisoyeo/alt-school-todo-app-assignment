@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Sign Up</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background: #f0f0f0;
+      }
+      .container {
+        max-width: 400px;
+        margin: 80px auto;
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px #ccc;
+      }
+      h1 {
+        text-align: center;
+      }
+      input[type="text"],
+      input[type="password"] {
+        width: 100%;
+        padding: 10px;
+        margin: 8px 0;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+      }
+      button {
+        width: 100%;
+        padding: 10px;
+        background: #28a745;
+        border: none;
+        color: white;
+        font-weight: bold;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      button:hover {
+        background: #19692c;
+      }
+      .message {
+        color: red;
+        margin-bottom: 10px;
+        text-align: center;
+      }
+      .footer {
+        text-align: center;
+        margin-top: 15px;
+      }
+      a {
+        text-decoration: none;
+        color: #007bff;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Sign Up</h1>
+      <form action="/signup" method="POST">
+        <input
+          type="text"
+          name="username"
+          placeholder="Choose a username"
+          required
+        />
+        <input
+          type="password"
+          name="password"
+          placeholder="Choose a password"
+          required
+        />
+        <button type="submit">Sign Up</button>
+      </form>
+
+      <div class="footer">
+        <p>Already have an account? <a href="/login">Login</a></p>
+      </div>
+    </div>
+  </body>
+</html>
