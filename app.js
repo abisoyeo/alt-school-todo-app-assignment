@@ -31,6 +31,9 @@ app.use(express.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
+// Trust the first proxy
+app.set("trust proxy", 1);
+
 // Session middleware
 app.use(
   session({
