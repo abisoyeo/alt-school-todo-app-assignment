@@ -19,30 +19,22 @@ exports.getAllTodos = async (req, res, next) => {
       todos,
       username: req.user.username,
       statusFilter: filter.status,
-      error: null,
+      error: req.flash("error") || [],
     });
   } catch (error) {
-    res.render("todos", {
-      todos: [],
-      username: req.user.username,
-      statusFilter: null,
-      error: "Error fetching todos",
-    });
+    req.flash("error", "Failed to get todos.");
+    res.redirect("/todos");
   }
 };
 
 exports.createTodo = async (req, res, next) => {
   try {
     const todo = await Todo.create({ ...req.body, user: req.user._id });
-    // res.status(201).json(todo);
+
     res.redirect("/todos");
   } catch (error) {
-    res.render("todos", {
-      todos: [],
-      username: req.user.username,
-      statusFilter: null,
-      error: "Error creating todos",
-    });
+    req.flash("error", "Failed to create todo. Please try again.");
+    res.redirect("/todos");
   }
 };
 
@@ -53,15 +45,15 @@ exports.updateTodo = async (req, res, next) => {
       { status: req.body.status },
       { new: true }
     );
-    if (!todo)
-      return res.status(404).json({ msg: "Todo not found or not yours" });
+
+    if (!todo) {
+      req.flash("error", "Todo not found or you don't have permission.");
+      return res.redirect("/todos");
+    }
+
     res.status(200).json({ message: "Updated successfully" });
   } catch (error) {
-    res.render("todos", {
-      todos: [],
-      username: req.user.username,
-      statusFilter: null,
-      error: "Error updating todos",
-    });
+    req.flash("error", "Something went wrong while updating.");
+    res.redirect("/todos");
   }
 };

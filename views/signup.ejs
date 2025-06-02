@@ -7,6 +7,10 @@
   </head>
   <body>
     <div class="container">
+      <% if (error && error.length) { %>
+      <div class="alert-danger"><%= error[0] %></div>
+      <% } %>
+
       <h1>Sign Up to Create Your Todos</h1>
       <form action="/signup" method="POST">
         <input

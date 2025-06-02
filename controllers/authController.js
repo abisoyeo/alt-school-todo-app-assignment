@@ -1,8 +1,12 @@
 const passport = require("passport");
 const userModel = require("../models/userModel");
 
-exports.getLogin = (req, res) => res.render("login");
-exports.getSignup = (req, res) => res.render("signup");
+exports.getLogin = (req, res) => {
+  res.render("login", { error: req.flash("error") || [] });
+};
+exports.getSignup = (req, res) => {
+  res.render("signup", { error: req.flash("error") || [] });
+};
 
 exports.signupUser = (req, res) => {
   const user = req.body;
@@ -10,7 +14,10 @@ exports.signupUser = (req, res) => {
     new userModel({ username: user.username }),
     user.password,
     (err, user) => {
-      if (err) return res.status(400).send(err);
+      if (err) {
+        req.flash("error", err.message);
+        return res.redirect("/signup");
+      }
       passport.authenticate("local")(req, res, () => res.redirect("/todos"));
     }
   );
@@ -18,6 +25,7 @@ exports.signupUser = (req, res) => {
 
 exports.loginUser = passport.authenticate("local", {
   failureRedirect: "/login",
+  failureFlash: true,
   successRedirect: "/todos",
 });
 

@@ -8,9 +8,7 @@ const {
 } = require("../validators/todoValidator");
 
 router.get("/", todoController.getAllTodos);
-// router.get("/:id", todoController.getTodoById);
 router.post("/", validate(createTodoSchema), todoController.createTodo);
 router.patch("/:id", validate(updateTodoSchema), todoController.updateTodo);
-// router.delete("/:id", todoController.deleteTodo);
 
 module.exports = router;

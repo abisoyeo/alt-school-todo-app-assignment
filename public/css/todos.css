@@ -174,3 +174,10 @@ button#addTodoButton:hover {
   border-color: #dc2626;
   color: white;
 }
+.alert-danger {
+  color: #cc0000;
+  background-color: rgba(255, 0, 0, 0.05);
+  padding: 0.1em 0.3em;
+  border-radius: 2px;
+  font-weight: bold;
+}

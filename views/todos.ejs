@@ -13,10 +13,11 @@
       </form>
     </header>
     <main>
+      <% if (error && error.length) { %>
+        <div class="alert-danger"><%= error[0] %></div>
+      <% } %>
       <div class="container">
-        <% if (error) { %>
-          <span class="error"><%= error %></span>
-        <% } %>
+        
         <div class="todo-output">
           <div class="todo-filter">
             <a href="/todos" class="btn">View All</a>
