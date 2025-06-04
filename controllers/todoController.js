@@ -1,6 +1,6 @@
 const Todo = require("../models/todoModel");
 
-exports.getAllTodos = async (req, res, next) => {
+exports.getTodo = async (req, res, next) => {
   try {
     const { todoStatus } = req.query;
 
@@ -51,7 +51,7 @@ exports.updateTodo = async (req, res, next) => {
       return res.redirect("/todos");
     }
 
-    res.status(200).json({ message: "Updated successfully" });
+    res.redirect("/todos");
   } catch (error) {
     req.flash("error", "Something went wrong while updating.");
     res.redirect("/todos");

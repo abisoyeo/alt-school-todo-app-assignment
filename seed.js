@@ -1,10 +1,8 @@
+require("dotenv").config();
 const mongoose = require("mongoose");
 const User = require("./models/userModel");
 const Todo = require("./models/todoModel");
 const db = require("./db");
-const passportLocalMongoose = require("passport-local-mongoose");
-
-require("dotenv").config();
 
 async function seed() {
   try {
@@ -13,7 +11,6 @@ async function seed() {
     await User.deleteMany();
     await Todo.deleteMany();
 
-    // Create users with passport-local-mongoose
     const users = [
       new User({ username: "alice" }),
       new User({ username: "bob" }),

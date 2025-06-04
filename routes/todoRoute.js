@@ -7,7 +7,7 @@ const {
   updateTodoSchema,
 } = require("../validators/todoValidator");
 
-router.get("/", todoController.getAllTodos);
+router.get("/", todoController.getTodo);
 router.post("/", validate(createTodoSchema), todoController.createTodo);
 router.patch("/:id", validate(updateTodoSchema), todoController.updateTodo);
 

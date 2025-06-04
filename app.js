@@ -10,16 +10,10 @@ const app = express();
 
 // Import user model and DB connector
 const userModel = require("./models/userModel");
-const db = require("./db");
 
 // Import routes
 const authRoutes = require("./routes/authRoute");
 const todoRoutes = require("./routes/todoRoute");
-
-const PORT = process.env.PORT || 3010;
-
-// Connect to MongoDB
-db.connectToMongoDB();
 
 // Set EJS as the view engine
 app.set("view engine", "ejs");
@@ -34,23 +28,40 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
 // Session middleware
-app.use(
-  session({
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: false,
-    store: MongoStore.create({
-      mongoUrl: process.env.MONGODB_URI,
-      collectionName: "sessions",
-      ttl: 14 * 24 * 60 * 60,
-    }),
-    cookie: {
-      maxAge: 14 * 24 * 60 * 60 * 1000,
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-    },
-  })
-);
+if (process.env.NODE_ENV === "test") {
+  // Memory store for tests to avoid MongoDB connections
+  app.use(
+    session({
+      secret: process.env.SESSION_SECRET,
+      resave: false,
+      saveUninitialized: false,
+      cookie: {
+        maxAge: 14 * 24 * 60 * 60 * 1000,
+        httpOnly: true,
+        secure: false,
+      },
+    })
+  );
+} else {
+  // MongoStore for production/development
+  app.use(
+    session({
+      secret: process.env.SESSION_SECRET,
+      resave: false,
+      saveUninitialized: false,
+      store: MongoStore.create({
+        mongoUrl: process.env.MONGODB_URI,
+        collectionName: "sessions",
+        ttl: 14 * 24 * 60 * 60,
+      }),
+      cookie: {
+        maxAge: 14 * 24 * 60 * 60 * 1000,
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+      },
+    })
+  );
+}
 
 // Flash middleware for displaying messages
 app.use(flash());
@@ -84,7 +95,4 @@ app.use((req, res, next) => {
   next();
 });
 
-// Start the server
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+module.exports = app;

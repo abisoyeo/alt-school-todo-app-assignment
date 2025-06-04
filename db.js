@@ -5,10 +5,29 @@ const MONGODB_URI = process.env.MONGODB_URI;
 
 // connect to mongodb
 async function connectToMongoDB() {
-  await mongoose
-    .connect(MONGODB_URI)
-    .then(() => console.log("Connected to MongoDB"))
-    .catch((err) => console.error("MongoDB connection error:", err.message));
+  if (mongoose.connection.readyState === 1) {
+    console.log("Already connected to MongoDB");
+    return;
+  }
+  try {
+    await mongoose.connect(MONGODB_URI);
+    console.log("Connected to MongoDB");
+  } catch (err) {
+    console.error("MongoDB connection error:", err.message);
+    throw err;
+  }
 }
 
-module.exports = { connectToMongoDB };
+async function disconnectFromMongoDB() {
+  if (mongoose.connection.readyState !== 0) {
+    try {
+      await mongoose.disconnect();
+      console.log("Disconnected from MongoDB");
+    } catch (err) {
+      console.error("MongoDB disconnection error:", err);
+      throw err;
+    }
+  }
+}
+
+module.exports = { connectToMongoDB, disconnectFromMongoDB };
