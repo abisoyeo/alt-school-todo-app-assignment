@@ -9,11 +9,11 @@ const path = require("path");
 const app = express();
 
 // Import user model and DB connector
-const userModel = require("./models/userModel");
+const userModel = require("./models/user");
 
 // Import routes
-const authRoutes = require("./routes/authRoute");
-const todoRoutes = require("./routes/todoRoute");
+const authRoutes = require("./routes/auth");
+const todoRoutes = require("./routes/todo");
 
 // Set EJS as the view engine
 app.set("view engine", "ejs");

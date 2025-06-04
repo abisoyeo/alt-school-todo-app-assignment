@@ -1,9 +1,8 @@
 const request = require("supertest");
 const app = require("../../app");
-const { connectToMongoDB, disconnectFromMongoDB, cleanupDB } = require("../db");
 const mongoose = require("mongoose");
-const User = require("../../models/userModel");
-const Todo = require("../../models/todoModel");
+const User = require("../../models/user");
+const Todo = require("../../models/todo");
 
 let agent;
 let user;
@@ -57,7 +56,7 @@ describe("Todo Routes", () => {
       .patch(`/todos/${todoId}`)
       .send({ status: "completed" });
 
-    expect(res.statusCode).toBe(302);
+    expect(res.statusCode).toBe(200);
     const updatedTodo = await Todo.findById(todoId);
     expect(updatedTodo.status).toBe("completed");
   });

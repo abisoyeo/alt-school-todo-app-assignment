@@ -1,5 +1,5 @@
 const passport = require("passport");
-const userModel = require("../models/userModel");
+const userModel = require("../models/user");
 
 exports.getLogin = (req, res) => {
   res.render("login", { error: req.flash("error") || [] });
