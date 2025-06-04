@@ -50,8 +50,7 @@ exports.updateTodo = async (req, res, next) => {
       req.flash("error", "Todo not found or you don't have permission.");
       return res.redirect("/todos");
     }
-
-    res.redirect("/todos");
+    res.status(200).end();
   } catch (error) {
     req.flash("error", "Something went wrong while updating.");
     res.redirect("/todos");
