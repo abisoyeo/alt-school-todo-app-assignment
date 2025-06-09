@@ -7,6 +7,4 @@ module.exports = {
   clearMocks: true,
   resetMocks: true,
   restoreMocks: true,
-  // Uncomment to run tests serially to avoid memory server conflicts
-  // maxWorkers: 1,
 };

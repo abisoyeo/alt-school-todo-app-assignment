@@ -1,6 +1,5 @@
 const request = require("supertest");
 const app = require("../../app");
-const mongoose = require("mongoose");
 const User = require("../../models/user");
 const Todo = require("../../models/todo");
 
@@ -8,7 +7,6 @@ let agent;
 let user;
 
 beforeAll(async () => {
-  // Register and login a test user
   user = new User({ username: "testuser" });
   await User.register(user, "testpass");
 
@@ -75,9 +73,8 @@ describe("Todo Routes", () => {
     expect(hackerLoginRes.statusCode).toBe(302);
     expect(hackerLoginRes.headers.location).toBe("/todos");
 
-    // Attempt to update the 'testuser's todo using the 'hacker's agent
     const res = await otherAgent
-      .patch(`/todos/${todoId}`) // todoId belongs to 'testuser'
+      .patch(`/todos/${todoId}`)
       .send({ status: "deleted" });
 
     expect(res.statusCode).toBe(302);

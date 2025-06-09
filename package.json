@@ -1,15 +1,19 @@
 {
   "name": "todoapp",
   "version": "1.0.0",
-  "description": "",
+  "description": "Full-stack Node.js Todo App with user authentication, task filtering, EJS views, and MongoDB – built for an AltSchool Africa assignment.",
   "main": "app.js",
   "scripts": {
     "test": "jest",
     "dev": "nodemon server.js",
     "start": "node server.js"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": ["nodejs", "express", "mongodb", "todo", "authentication", "ejs", "fullstack"],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/abisoyeo/alt-school-todo-app-assignment.git"
+  },
+  "author": "Abisoye Ogunmona",
   "devDependencies": {
     "jest": "^29.7.0",
     "nodemon": "^3.1.10",

@@ -6,10 +6,10 @@ exports.getTodo = async (req, res, next) => {
 
     const filter = { user: req.user._id };
 
-    // Always exclude deleted tasks
+    // Exclude deleted tasks
     filter.status = { $ne: "deleted" };
 
-    // Apply additional filtering if status is provided
+    // Additional filtering if status is provided
     if (todoStatus === "completed") filter.status = "completed";
     else if (todoStatus === "pending") filter.status = "pending";
 

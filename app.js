@@ -6,10 +6,9 @@ const MongoStore = require("connect-mongo");
 const connectEnsureLogin = require("connect-ensure-login");
 const flash = require("connect-flash");
 const path = require("path");
-const app = express();
-
-// Import user model and DB connector
 const userModel = require("./models/user");
+
+const app = express();
 
 // Import routes
 const authRoutes = require("./routes/auth");
@@ -29,7 +28,6 @@ app.use(express.static("public"));
 
 // Session middleware
 if (process.env.NODE_ENV === "test") {
-  // Memory store for tests to avoid MongoDB connections
   app.use(
     session({
       secret: process.env.SESSION_SECRET,
@@ -66,13 +64,6 @@ if (process.env.NODE_ENV === "test") {
 // Flash middleware for displaying messages
 app.use(flash());
 
-// Middleware to log session and user information for debugging
-// app.use((req, res, next) => {
-//   console.log("SESSION:", req.session);
-//   console.log("USER:", req.user);
-//   next();
-// });
-
 // Passport configuration
 app.use(passport.initialize());
 app.use(passport.session());
@@ -82,14 +73,13 @@ passport.serializeUser(userModel.serializeUser());
 passport.deserializeUser(userModel.deserializeUser());
 
 // Routes
-// Redirect root ("/") to "/signup"
 app.get("/", (req, res) => {
   res.redirect("/signup");
 });
-app.use("/", authRoutes); // Login, Signup, Logout routes
+app.use("/", authRoutes);
 app.use("/todos", connectEnsureLogin.ensureLoggedIn(), todoRoutes); // Protected todo routes
 
-// Middleware to set flash messages in res.locals for EJS templates
+// Middleware to set flash messages
 app.use((req, res, next) => {
   res.locals.error = req.flash("error");
   next();
