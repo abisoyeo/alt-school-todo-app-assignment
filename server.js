@@ -3,12 +3,13 @@ const app = require("./app");
 const db = require("./config/db");
 
 const PORT = process.env.PORT || 3010;
+const HOST = process.env.HOST || "0.0.0.0";
 
 // Connect to MongoDB and start the server
 db.connectToMongoDB()
   .then(() => {
-    app.listen(PORT, () => {
-      console.log(`Server is running on port ${PORT}`);
+    app.listen(PORT, HOST, () => {
+      console.log(`Server is running on host ${HOST} and port ${PORT}`);
     });
   })
   .catch((err) => {
